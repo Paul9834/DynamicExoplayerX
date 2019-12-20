@@ -73,8 +73,6 @@ public class CanalesAdapter extends RecyclerView.Adapter<CanalesAdapter.MyViewHo
             super(itemView);
 
             textView = itemView.findViewById(R.id.txt);
-            textView2 = itemView.findViewById(R.id.txt2);
-            textView3 = itemView.findViewById(R.id.txt3);
             imagen = itemView.findViewById(R.id.imageView);
             test = itemView.findViewById(R.id.button2);
 
