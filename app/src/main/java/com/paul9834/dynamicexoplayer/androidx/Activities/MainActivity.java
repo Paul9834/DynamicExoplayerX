@@ -1,10 +1,14 @@
 package com.paul9834.dynamicexoplayer.androidx.Activities;
 
+import android.app.PictureInPictureParams;
 import android.content.SharedPreferences;
+import android.graphics.Rect;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.util.Rational;
 import android.view.KeyEvent;
 import android.view.Surface;
 import android.view.View;
@@ -72,8 +76,8 @@ import com.android.volley.toolbox.Volley;
 /**
  * Reproducción de ExoPlayer a través de microservicio Rest con links dinamicos..
  *
- * @author  Kevin Paul Montealegre Melo
- * @version 1.3
+ * @author Kevin Paul Montealegre Melo
+ * @version 2.0
  */
 
 public class MainActivity extends AppCompatActivity implements VideoRendererEventListener {
@@ -83,12 +87,12 @@ public class MainActivity extends AppCompatActivity implements VideoRendererEven
     private SimpleExoPlayer player;
     private TextView resolutionTextView;
     private RequestQueue mQueue;
-    DynamicConcatenatingMediaSource dynamicConcatenatingMediaSource;
     private ArrayList<String> links;
     int lastWindowIndex = 0;
     Button boton;
     private View debugRootView;
     DataSource.Factory dataSourceFactory;
+    ConcatenatingMediaSource concatenatedSource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,19 +162,16 @@ public class MainActivity extends AppCompatActivity implements VideoRendererEven
 
                 Log.e("POSITION", Integer.toString(position));
 
-                ConcatenatingMediaSource concatenatedSource = new ConcatenatingMediaSource();
+                concatenatedSource = new ConcatenatingMediaSource();
                 concatenatedSource.addMediaSources(sources);
-
-
 
 
                 player.prepare(concatenatedSource);
                 player.seekTo(position, 0);
 
 
-
-
             }
+
             @Override
             public void onFailure(Call<List<Canales>> call, Throwable t) {
                 Toast.makeText(MainActivity.this, "Error." + t.getMessage(), Toast.LENGTH_LONG).show();
@@ -179,46 +180,52 @@ public class MainActivity extends AppCompatActivity implements VideoRendererEven
         });
 
 
-
-
-
         player.addListener(new ExoPlayer.EventListener() {
             @Override
             public void onTimelineChanged(Timeline timeline, Object manifest, int reason) {
             }
+
             @Override
             public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
                 Log.v(TAG, "Listener-onTracksChanged... ");
             }
+
             @Override
             public void onLoadingChanged(boolean isLoading) {
             }
+
             @Override
             public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-                Log.v(TAG, "Listener-onPlayerStateChanged..." + playbackState+"|||isDrawingCacheEnabled():"+simpleExoPlayerView.isDrawingCacheEnabled());
+                Log.v(TAG, "Listener-onPlayerStateChanged..." + playbackState + "|||isDrawingCacheEnabled():" + simpleExoPlayerView.isDrawingCacheEnabled());
             }
+
             @Override
             public void onRepeatModeChanged(int repeatMode) {
             }
+
             @Override
             public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
             }
+
             @Override
             public void onPlayerError(ExoPlaybackException error) {
                 Log.e(TAG, "Listener-onPlayerError...");
-                player.prepare(dynamicConcatenatingMediaSource);
+                player.prepare(concatenatedSource);
                 player.setPlayWhenReady(true);
             }
+
             @Override
             public void onPositionDiscontinuity(int reason) {
                 int latestWindowIndex = player.getCurrentWindowIndex();
                 if (latestWindowIndex != lastWindowIndex) {
-                     lastWindowIndex = latestWindowIndex;
-                    }
+                    lastWindowIndex = latestWindowIndex;
+                }
             }
+
             @Override
             public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
             }
+
             @Override
             public void onSeekProcessed() {
             }
@@ -228,50 +235,60 @@ public class MainActivity extends AppCompatActivity implements VideoRendererEven
     }
 
 
-
     @Override
     public void onVideoEnabled(DecoderCounters counters) {
     }
+
     @Override
     public void onVideoDecoderInitialized(String decoderName, long initializedTimestampMs, long initializationDurationMs) {
     }
+
     @Override
     public void onVideoInputFormatChanged(Format format) {
     }
+
     @Override
     public void onDroppedFrames(int count, long elapsedMs) {
     }
+
     @Override
     public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio) {
         Log.v(TAG, "onVideoSizeChanged [" + " width: " + width + " height: " + height + "]");
         resolutionTextView.setText("RES:(WxH):" + width + "X" + height + "\n           " + height + "p");//shows video info
     }
+
     @Override
     public void onRenderedFirstFrame(Surface surface) {
     }
+
     @Override
     public void onVideoDisabled(DecoderCounters counters) {
     }
+
     @Override
     protected void onStop() {
         super.onStop();
         Log.v(TAG, "onStop()...");
     }
+
     @Override
     protected void onStart() {
         super.onStart();
         Log.v(TAG, "onStart()...");
     }
+
     @Override
     protected void onResume() {
         super.onResume();
         Log.v(TAG, "onResume()...");
     }
+
     @Override
     protected void onPause() {
         super.onPause();
         Log.v(TAG, "onPause()...");
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -279,75 +296,19 @@ public class MainActivity extends AppCompatActivity implements VideoRendererEven
         player.release();
     }
 
-
     @Override
-    public boolean dispatchKeyEvent(KeyEvent event) {
-        int keyCode = event.getKeyCode();
+    protected void onUserLeaveHint() {
+        super.onUserLeaveHint();
 
-        if (event.getAction() == KeyEvent.ACTION_DOWN) {
 
-            Log.e("COIDOG DE EVENTOS", keyCode+" Codigo");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            enterPictureInPictureMode(
+                    new PictureInPictureParams.Builder()
+                            .setAspectRatio(new Rational(350, 200))
+                            .setSourceRectHint(new Rect(
+                                    simpleExoPlayerView.getLeft(), simpleExoPlayerView.getTop(),
+                                    simpleExoPlayerView.getRight(), simpleExoPlayerView.getBottom())).build());
 
-            switch (keyCode) {
-                case KeyEvent.KEYCODE_MEDIA_FAST_FORWARD:
-                    break;
-                case KeyEvent.KEYCODE_MEDIA_REWIND:
-                    break;
-                case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
-                  //  player.setPlayWhenReady(!player.getPlayWhenReady());
-                    break;
-                case KeyEvent.KEYCODE_MEDIA_PLAY:
-                 //   player.setPlayWhenReady(true);
-                    break;
-                case KeyEvent.KEYCODE_MEDIA_PAUSE:
-                   // Toast.makeText(MainActivity.this, "Pausa", Toast.LENGTH_LONG).show();
-//.setPlayWhenReady(false);
-                    break;
-
-                    ////// EVENTO DE CONTROL //////////
-                case 19:
-                    Toast.makeText(MainActivity.this, "Funciona Siguiente", Toast.LENGTH_LONG).show();
-                   next();
-                    break;
-                case 20:
-                    previous();
-                    break;
-
-                case KeyEvent.KEYCODE_MEDIA_NEXT:
-                    Toast.makeText(MainActivity.this, "Funciona Siguiente", Toast.LENGTH_LONG).show();
-                    break;
-                case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
-                    Toast.makeText(MainActivity.this, "Funciona Atras", Toast.LENGTH_LONG).show();
-                    break;
-                default:
-                    break;
-            }
-        }
-        return true;
-    }
-
-    private void previous() {
-        Timeline currentTimeline = player.getCurrentTimeline();
-        if (currentTimeline.isEmpty()) {
-            return;
-        }
-        int currentWindowIndex = player.getCurrentWindowIndex();
-        if (currentWindowIndex > 0) {
-            player.seekTo(currentWindowIndex - 1, C.TIME_UNSET);
-        } else {
-            player.seekTo(0);
         }
     }
-
-    private void next() {
-        Timeline currentTimeline = player.getCurrentTimeline();
-        if (currentTimeline.isEmpty()) {
-            return;
-        }
-        int currentWindowIndex = player.getCurrentWindowIndex();
-        if (currentWindowIndex < currentTimeline.getWindowCount() - 1) {
-            player.seekTo(currentWindowIndex + 1, C.TIME_UNSET);
-        }
-    }
-
 }
