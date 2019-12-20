@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Surface;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.google.android.exoplayer2.C;
 import com.paul9834.dynamicexoplayer.androidx.Adapters.CanalesAdapter;
 import com.paul9834.dynamicexoplayer.androidx.ClientRetrofit.RetrofitClient;
 import com.paul9834.dynamicexoplayer.androidx.Controllers.CanalesInterface;
@@ -276,4 +278,76 @@ public class MainActivity extends AppCompatActivity implements VideoRendererEven
         Log.v(TAG, "onDestroy()...");
         player.release();
     }
+
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        int keyCode = event.getKeyCode();
+
+        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+
+            Log.e("COIDOG DE EVENTOS", keyCode+" Codigo");
+
+            switch (keyCode) {
+                case KeyEvent.KEYCODE_MEDIA_FAST_FORWARD:
+                    break;
+                case KeyEvent.KEYCODE_MEDIA_REWIND:
+                    break;
+                case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
+                  //  player.setPlayWhenReady(!player.getPlayWhenReady());
+                    break;
+                case KeyEvent.KEYCODE_MEDIA_PLAY:
+                 //   player.setPlayWhenReady(true);
+                    break;
+                case KeyEvent.KEYCODE_MEDIA_PAUSE:
+                   // Toast.makeText(MainActivity.this, "Pausa", Toast.LENGTH_LONG).show();
+//.setPlayWhenReady(false);
+                    break;
+
+                    ////// EVENTO DE CONTROL //////////
+                case 19:
+                    Toast.makeText(MainActivity.this, "Funciona Siguiente", Toast.LENGTH_LONG).show();
+                   next();
+                    break;
+                case 20:
+                    previous();
+                    break;
+
+                case KeyEvent.KEYCODE_MEDIA_NEXT:
+                    Toast.makeText(MainActivity.this, "Funciona Siguiente", Toast.LENGTH_LONG).show();
+                    break;
+                case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
+                    Toast.makeText(MainActivity.this, "Funciona Atras", Toast.LENGTH_LONG).show();
+                    break;
+                default:
+                    break;
+            }
+        }
+        return true;
+    }
+
+    private void previous() {
+        Timeline currentTimeline = player.getCurrentTimeline();
+        if (currentTimeline.isEmpty()) {
+            return;
+        }
+        int currentWindowIndex = player.getCurrentWindowIndex();
+        if (currentWindowIndex > 0) {
+            player.seekTo(currentWindowIndex - 1, C.TIME_UNSET);
+        } else {
+            player.seekTo(0);
+        }
+    }
+
+    private void next() {
+        Timeline currentTimeline = player.getCurrentTimeline();
+        if (currentTimeline.isEmpty()) {
+            return;
+        }
+        int currentWindowIndex = player.getCurrentWindowIndex();
+        if (currentWindowIndex < currentTimeline.getWindowCount() - 1) {
+            player.seekTo(currentWindowIndex + 1, C.TIME_UNSET);
+        }
+    }
+
 }
