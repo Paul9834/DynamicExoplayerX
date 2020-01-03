@@ -1,7 +1,9 @@
 package com.paul9834.dynamicexoplayer.androidx.Activities;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -32,6 +34,8 @@ public class  LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        userSharedPreference();
 
         ActionBar actionBar = getSupportActionBar(); // or getActionBar();
         getSupportActionBar().setTitle("Inicio de Sesión");
@@ -91,9 +95,17 @@ public class  LoginActivity extends AppCompatActivity {
                 }
 
                 else {
+
+                    SharedPreferences.Editor editor = getSharedPreferences("Hola", MODE_PRIVATE).edit();
+                    editor.putBoolean("isRegistered", true).apply();
+
+
                     Toast.makeText(LoginActivity.this, "Ha iniciado sesión correctamente..", Toast.LENGTH_LONG).show();
                     Intent i = new Intent(LoginActivity.this, RecyclerViewHome.class);
                     startActivity(i);
+                    finish();
+
+
                 }
             }
             @Override
@@ -104,6 +116,24 @@ public class  LoginActivity extends AppCompatActivity {
         });
 
 
+
+    }
+
+
+
+
+    private void userSharedPreference(){
+
+
+        SharedPreferences prefs = getSharedPreferences("Hola", MODE_PRIVATE);
+        boolean isRegistered = prefs.getBoolean("isRegistered", false);
+
+
+        if(isRegistered){
+            Intent i = new Intent(LoginActivity.this, RecyclerViewHome.class);
+            startActivity(i);
+            finish();
+        }
 
     }
 }
