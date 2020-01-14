@@ -6,6 +6,7 @@ import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.util.Rational;
@@ -13,6 +14,7 @@ import android.view.KeyEvent;
 import android.view.Surface;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.exoplayer2.C;
+import com.google.android.material.card.MaterialCardView;
 import com.paul9834.dynamicexoplayer.androidx.Adapters.CanalesAdapter;
 import com.paul9834.dynamicexoplayer.androidx.ClientRetrofit.RetrofitClient;
 import com.paul9834.dynamicexoplayer.androidx.Controllers.CanalesInterface;
@@ -71,6 +74,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.squareup.picasso.Picasso;
 
 
 /**
@@ -85,21 +89,44 @@ public class MainActivity extends AppCompatActivity implements VideoRendererEven
     private static final String TAG = "MainActivity";
     private PlayerView simpleExoPlayerView;
     private SimpleExoPlayer player;
-    private TextView resolutionTextView;
     private RequestQueue mQueue;
     private ArrayList<String> links;
+    private ArrayList<String> names;
+    private ArrayList<String> logos;
+
     int lastWindowIndex = 0;
     Button boton;
     private View debugRootView;
     DataSource.Factory dataSourceFactory;
     ConcatenatingMediaSource concatenatedSource;
 
+    TextView canal;
+    ImageView image;
+
+    MaterialCardView cardView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        resolutionTextView = new TextView(this);
-        resolutionTextView = (TextView) findViewById(R.id.resolution_textView);
+
+
+
+        canal = new TextView(this);
+        canal = (TextView) findViewById(R.id.texto);
+
+        image = (ImageView) findViewById(R.id.imageView2);
+
+        cardView = (MaterialCardView) findViewById(R.id.material);
+
+
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                cardView.setVisibility(View.INVISIBLE); }
+        }, 3000);
+
 
         // 1. Se llama al metodo Rest
 
@@ -137,6 +164,8 @@ public class MainActivity extends AppCompatActivity implements VideoRendererEven
         // 5. Metodo REST para obtener los canales dinamicos //
 
         links = new ArrayList<>();
+        names = new ArrayList<>();
+        logos = new ArrayList<>();
 
 
         Call<List<Canales>> call = RetrofitClient.getInstance().getLogin().getCanales();
@@ -147,6 +176,8 @@ public class MainActivity extends AppCompatActivity implements VideoRendererEven
 
                 for (Canales post : posts) {
                     links.add(post.getLink());
+                    names.add(post.getName());
+                    logos.add(post.getLogo());
                 }
 
                 ArrayList<MediaSource> sources = new ArrayList<>();
@@ -167,6 +198,17 @@ public class MainActivity extends AppCompatActivity implements VideoRendererEven
 
 
                 player.prepare(concatenatedSource);
+
+
+
+                canal.setText(names.get(position));
+
+                Picasso.get().load(logos.get(position)).into(image);
+
+
+
+
+
                 player.seekTo(position, 0);
 
 
@@ -216,10 +258,19 @@ public class MainActivity extends AppCompatActivity implements VideoRendererEven
 
             @Override
             public void onPositionDiscontinuity(int reason) {
+
                 int latestWindowIndex = player.getCurrentWindowIndex();
+
+                canal.setText(names.get(latestWindowIndex));
+
+                Picasso.get().load(logos.get(latestWindowIndex)).into(image);
+
+
                 if (latestWindowIndex != lastWindowIndex) {
                     lastWindowIndex = latestWindowIndex;
                 }
+
+
             }
 
             @Override
@@ -254,7 +305,7 @@ public class MainActivity extends AppCompatActivity implements VideoRendererEven
     @Override
     public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio) {
         Log.v(TAG, "onVideoSizeChanged [" + " width: " + width + " height: " + height + "]");
-        resolutionTextView.setText("RES:(WxH):" + width + "X" + height + "\n           " + height + "p");//shows video info
+       // resolutionTextView.setText("RES:(WxH):" + width + "X" + height + "\n           " + height + "p");//shows video info
     }
 
     @Override

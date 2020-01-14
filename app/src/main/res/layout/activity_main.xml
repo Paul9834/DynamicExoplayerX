@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root"
     android:layout_width="match_parent"
@@ -9,33 +10,137 @@
     tools:context="com.paul9834.dynamicexoplayer.androidx.Activities.MainActivity">
 
 
-    <TextView
-        android:id="@+id/sample_app_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:text="CANALES TERRAFORM"
-        android:textColor="#000000"
-        android:textSize="40sp"
-        android:visibility="invisible" />
-
-    <TextView
-        android:id="@+id/resolution_textView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/sample_app_title"
-        android:background="#FFFFFF"
-        android:gravity="center_horizontal"
-        android:text="RESOLUCION DE SALIDA"
-        android:textColor="#000000"
-        android:textSize="40px"
-        android:visibility="invisible" />
-
     <com.google.android.exoplayer2.ui.SimpleExoPlayerView
         android:id="@+id/player_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/resolution_textView" />
+        android:layout_below="@+id/resolution_textView"
+        android:layout_marginStart="10dp"
+
+        >
+
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/material"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+                <LinearLayout
+                    android:id="@+id/linear1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+
+                    <ImageView
+                        android:id="@+id/imageView2"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_weight="1"
+                        tools:srcCompat="@tools:sample/avatars" />
+
+                    <TextView
+                        android:id="@+id/texto"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_medium"
+                        android:text="TextView"
+                        android:textSize="24sp"
+                        tools:text="HOLAAAAAAAAAAAAAAAA" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linear2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/imageView3"
+                        android:layout_width="41dp"
+                        android:layout_height="33dp"
+                        android:layout_weight="1"
+                        app:srcCompat="@drawable/red"
+                        tools:srcCompat="@drawable/red" />
+
+                    <TextView
+                        android:id="@+id/texto2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_medium"
+                        android:text="Info"
+                        android:textSize="24sp"
+                        tools:text="Info" />
+
+                    <ImageView
+                        android:id="@+id/imageView4"
+                        android:layout_width="41dp"
+                        android:layout_height="33dp"
+                        android:layout_weight="1"
+                        app:srcCompat="@drawable/green"
+                        tools:srcCompat="@drawable/green" />
+
+                    <TextView
+                        android:id="@+id/texto3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_medium"
+                        android:text="EPG"
+                        android:textSize="24sp"
+                        tools:text="EPG" />
+
+                    <ImageView
+                        android:id="@+id/imageView5"
+                        android:layout_width="41dp"
+                        android:layout_height="33dp"
+                        android:layout_weight="1"
+                        app:srcCompat="@drawable/yellow"
+                        tools:srcCompat="@drawable/yellow" />
+
+                    <TextView
+                        android:id="@+id/texto4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_medium"
+                        android:text="Audio"
+                        android:textSize="24sp"
+                        tools:text="Audio" />
+
+                    <ImageView
+                        android:id="@+id/imageView6"
+                        android:layout_width="41dp"
+                        android:layout_height="33dp"
+                        android:layout_weight="1"
+                        app:srcCompat="@drawable/blue"
+                        tools:srcCompat="@drawable/blue" />
+
+                    <TextView
+                        android:id="@+id/texto5"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_medium"
+                        android:text="Subtitle"
+                        android:textSize="24sp"
+                        tools:text="Subtitle" />
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </com.google.android.exoplayer2.ui.SimpleExoPlayerView>
 
 
 </FrameLayout>
