@@ -1,3 +1,19 @@
+/*
+ *
+ *  * Copyright (c) 2020. [Kevin Paul Montealegre Melo]
+ *  *
+ *  * Permission is hereby granted, free of charge, to any person obtaining a copy
+ *  * of this software and associated documentation files (the "Software"), to deal
+ *  * in the Software without restriction, including without limitation the rights
+ *  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *  * copies of the Software, and to permit persons to whom the Software is
+ *  * furnished to do so, subject to the following conditions:
+ *  *
+ *  * The above copyright notice and this permission notice shall be included in
+ *  * all copies or substantial portions of the Software.
+ *
+ */
+
 package com.paul9834.dynamicexoplayer.androidx.Activities;
 
 import android.app.PictureInPictureParams;
@@ -10,7 +26,6 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.util.Rational;
-import android.view.KeyEvent;
 import android.view.Surface;
 import android.view.View;
 import android.widget.Button;
@@ -19,16 +34,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.google.android.exoplayer2.C;
-import com.google.android.material.card.MaterialCardView;
-import com.paul9834.dynamicexoplayer.androidx.Adapters.CanalesAdapter;
-import com.paul9834.dynamicexoplayer.androidx.ClientRetrofit.RetrofitClient;
-import com.paul9834.dynamicexoplayer.androidx.Controllers.CanalesInterface;
-import com.paul9834.dynamicexoplayer.androidx.Entities.Canales;
-import com.paul9834.dynamicexoplayer.androidx.Entities.PostCanalesID;
-import com.paul9834.dynamicexoplayer.androidx.R;
+import com.android.volley.RequestQueue;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -38,7 +45,6 @@ import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.decoder.DecoderCounters;
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource;
-import com.google.android.exoplayer2.source.DynamicConcatenatingMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
@@ -54,27 +60,17 @@ import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.google.android.exoplayer2.video.VideoRendererEventListener;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.google.android.material.card.MaterialCardView;
+import com.paul9834.dynamicexoplayer.androidx.ClientRetrofit.RetrofitClient;
+import com.paul9834.dynamicexoplayer.androidx.Entities.Canales;
+import com.paul9834.dynamicexoplayer.androidx.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-import com.squareup.picasso.Picasso;
 
 
 /**
@@ -83,7 +79,6 @@ import com.squareup.picasso.Picasso;
  * @author Kevin Paul Montealegre Melo
  * @version 2.0
  */
-
 public class MainActivity extends AppCompatActivity implements VideoRendererEventListener {
 
     private static final String TAG = "MainActivity";
@@ -94,15 +89,36 @@ public class MainActivity extends AppCompatActivity implements VideoRendererEven
     private ArrayList<String> names;
     private ArrayList<String> logos;
 
+    /**
+     * The Last window index.
+     */
     int lastWindowIndex = 0;
+    /**
+     * The Boton.
+     */
     Button boton;
     private View debugRootView;
+    /**
+     * The Data source factory.
+     */
     DataSource.Factory dataSourceFactory;
+    /**
+     * The Concatenated source.
+     */
     ConcatenatingMediaSource concatenatedSource;
 
+    /**
+     * The Canal.
+     */
     TextView canal;
+    /**
+     * The Image.
+     */
     ImageView image;
 
+    /**
+     * The Card view.
+     */
     MaterialCardView cardView;
 
     @Override

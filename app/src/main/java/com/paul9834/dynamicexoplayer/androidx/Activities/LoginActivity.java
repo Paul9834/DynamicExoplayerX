@@ -1,3 +1,19 @@
+/*
+ *
+ *  * Copyright (c) 2020. [Kevin Paul Montealegre Melo]
+ *  *
+ *  * Permission is hereby granted, free of charge, to any person obtaining a copy
+ *  * of this software and associated documentation files (the "Software"), to deal
+ *  * in the Software without restriction, including without limitation the rights
+ *  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *  * copies of the Software, and to permit persons to whom the Software is
+ *  * furnished to do so, subject to the following conditions:
+ *  *
+ *  * The above copyright notice and this permission notice shall be included in
+ *  * all copies or substantial portions of the Software.
+ *
+ */
+
 package com.paul9834.dynamicexoplayer.androidx.Activities;
 
 import android.app.ProgressDialog;
@@ -24,10 +40,22 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 
+/**
+ * The type Login activity.
+ */
 public class  LoginActivity extends AppCompatActivity {
 
+    /**
+     * The Correo.
+     */
     EditText correo;
+    /**
+     * The Password.
+     */
     EditText password;
+    /**
+     * The Boton.
+     */
     Button boton;
 
     @Override
@@ -59,6 +87,9 @@ public class  LoginActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Callback.
+     */
     public void Callback () {
 
         String correoCall = correo.getText().toString();
