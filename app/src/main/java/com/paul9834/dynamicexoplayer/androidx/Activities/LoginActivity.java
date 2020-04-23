@@ -16,8 +16,8 @@
 
 package com.paul9834.dynamicexoplayer.androidx.Activities;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -25,7 +25,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
@@ -36,6 +35,7 @@ import com.paul9834.dynamicexoplayer.androidx.Entities.UserLogin;
 import com.paul9834.dynamicexoplayer.androidx.R;
 
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -66,7 +66,7 @@ public class  LoginActivity extends AppCompatActivity {
         userSharedPreference();
 
         ActionBar actionBar = getSupportActionBar(); // or getActionBar();
-        getSupportActionBar().setTitle("Inicio de Sesión");
+        Objects.requireNonNull(getSupportActionBar()).setTitle("Inicio de Sesión");
 
         Login();
     }
@@ -117,8 +117,11 @@ public class  LoginActivity extends AppCompatActivity {
 
                 Boolean auth=true;
 
+                int id = 0;
+
                 for (UserLogin e : lista) {
                     auth = e.getFail();
+                    id = e.getIdUser();
                 }
 
                 if (auth) {
@@ -127,8 +130,20 @@ public class  LoginActivity extends AppCompatActivity {
 
                 else {
 
+
+                    SharedPreferences sp = getSharedPreferences("your_prefs", Activity.MODE_PRIVATE);
+                    SharedPreferences.Editor idUser = sp.edit();
+                    idUser.putInt("your_int_key", id);
+                    idUser.apply();
+
+
+
+
                     SharedPreferences.Editor editor = getSharedPreferences("Hola", MODE_PRIVATE).edit();
                     editor.putBoolean("isRegistered", true).apply();
+
+
+
 
 
                     Toast.makeText(LoginActivity.this, "Ha iniciado sesión correctamente..", Toast.LENGTH_LONG).show();
@@ -158,7 +173,6 @@ public class  LoginActivity extends AppCompatActivity {
 
         SharedPreferences prefs = getSharedPreferences("Hola", MODE_PRIVATE);
         boolean isRegistered = prefs.getBoolean("isRegistered", false);
-
 
         if(isRegistered){
             Intent i = new Intent(LoginActivity.this, RecyclerViewHome.class);

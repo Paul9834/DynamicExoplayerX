@@ -25,47 +25,40 @@ import com.google.gson.annotations.SerializedName;
  */
 public class UserLogin {
 
+
     @SerializedName("fail")
     @Expose
     private Boolean fail;
-    @SerializedName("errors")
+    @SerializedName("id_user")
     @Expose
-    private String errors;
+    private Integer idUser;
+    @SerializedName("name")
+    @Expose
+    private String name;
 
-    /**
-     * Gets fail.
-     *
-     * @return the fail
-     */
     public Boolean getFail() {
         return fail;
     }
 
-    /**
-     * Sets fail.
-     *
-     * @param fail the fail
-     */
     public void setFail(Boolean fail) {
         this.fail = fail;
     }
 
-    /**
-     * Gets errors.
-     *
-     * @return the errors
-     */
-    public String getErrors() {
-        return errors;
+    public Integer getIdUser() {
+        return idUser;
     }
 
-    /**
-     * Sets errors.
-     *
-     * @param errors the errors
-     */
-    public void setErrors(String errors) {
-        this.errors = errors;
+    public void setIdUser(Integer idUser) {
+        this.idUser = idUser;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
 }
+

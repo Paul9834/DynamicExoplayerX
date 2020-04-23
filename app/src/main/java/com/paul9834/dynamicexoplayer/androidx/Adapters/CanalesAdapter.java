@@ -7,18 +7,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
 import android.widget.Button;
-import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.paul9834.dynamicexoplayer.androidx.Activities.MainActivity;
-import com.paul9834.dynamicexoplayer.androidx.Activities.RecyclerViewHome;
 import com.paul9834.dynamicexoplayer.androidx.Entities.Canales;
 import com.paul9834.dynamicexoplayer.androidx.R;
 import com.squareup.picasso.Picasso;
@@ -33,7 +29,7 @@ public class CanalesAdapter extends RecyclerView.Adapter<CanalesAdapter.MyViewHo
     private final static int FADE_DURATION = 1000;
 
     private boolean on_attach = true;
-    long DURATION = 500;
+    private long DURATION = 500;
 
 
     public CanalesAdapter(List<Canales> publications) {
@@ -67,6 +63,7 @@ public class CanalesAdapter extends RecyclerView.Adapter<CanalesAdapter.MyViewHo
         Canales publications2 = publications.get(position);
         holder.textView.setText(publications2.getName());
         Picasso.get().load(publications2.getLogo()).into(holder.imagen);
+
 
 
         holder.test.setOnClickListener(new View.OnClickListener() {
@@ -106,7 +103,7 @@ public class CanalesAdapter extends RecyclerView.Adapter<CanalesAdapter.MyViewHo
         return publications.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{
+    static class MyViewHolder extends RecyclerView.ViewHolder{
 
 
         TextView textView;
@@ -115,7 +112,7 @@ public class CanalesAdapter extends RecyclerView.Adapter<CanalesAdapter.MyViewHo
         ImageView imagen;
         Button test;
 
-        public MyViewHolder(@NonNull View itemView) {
+        MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
             textView = itemView.findViewById(R.id.txt);

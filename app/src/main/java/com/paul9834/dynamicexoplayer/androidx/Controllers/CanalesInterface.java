@@ -26,6 +26,7 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 /**
  * The interface Canales interface.
@@ -37,8 +38,8 @@ public interface CanalesInterface {
      *
      * @return the canales
      */
-    @GET("getCanales/3")
-    Call<List<Canales>> getCanales();
+    @GET("getCanales/{id}")
+    Call<List<Canales>> getCanales(@Path("id") int id);
 
     /**
      * Login call.

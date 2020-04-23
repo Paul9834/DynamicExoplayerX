@@ -16,6 +16,7 @@
 
 package com.paul9834.dynamicexoplayer.androidx.Activities;
 
+import android.app.Activity;
 import android.app.PictureInPictureParams;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
@@ -184,7 +185,12 @@ public class MainActivity extends AppCompatActivity implements VideoRendererEven
         logos = new ArrayList<>();
 
 
-        Call<List<Canales>> call = RetrofitClient.getInstance().getLogin().getCanales();
+
+        SharedPreferences sp = getSharedPreferences("your_prefs", Activity.MODE_PRIVATE);
+        int idUser = sp.getInt("your_int_key", -1);
+
+        
+        Call<List<Canales>> call = RetrofitClient.getInstance().getLogin().getCanales(idUser);
         call.enqueue(new Callback<List<Canales>>() {
             @Override
             public void onResponse(Call<List<Canales>> call, retrofit2.Response<List<Canales>> response) {
