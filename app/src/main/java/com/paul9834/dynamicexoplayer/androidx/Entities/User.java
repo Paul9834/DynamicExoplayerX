@@ -16,40 +16,49 @@
 
 package com.paul9834.dynamicexoplayer.androidx.Entities;
 
+
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 /**
- * The type Post canales id.
+ * The type User login.
  */
-public class PostCanalesID {
+public class User {
 
-    private String id;
-    private String uri;
-    private String alt_uri;
 
-    /**
-     * Gets id.
-     *
-     * @return the id
-     */
-    public String getId() {
-        return id;
+    @SerializedName("fail")
+    @Expose
+    private Boolean fail;
+    @SerializedName("id_user")
+    @Expose
+    private Integer idUser;
+    @SerializedName("name")
+    @Expose
+    private String name;
+
+    public Boolean getFail() {
+        return fail;
     }
 
-    /**
-     * Gets uri.
-     *
-     * @return the uri
-     */
-    public String getUri() {
-        return uri;
+    public void setFail(Boolean fail) {
+        this.fail = fail;
     }
 
-    /**
-     * Gets uri.
-     *
-     * @return the uri
-     */
-    public String getalt_uri() {
-        return alt_uri;
+    public Integer getIdUser() {
+        return idUser;
+    }
+
+    public void setIdUser(Integer idUser) {
+        this.idUser = idUser;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
 }
+

@@ -23,7 +23,7 @@ import com.google.gson.annotations.SerializedName;
 /**
  * The type Canales.
  */
-public class Canales {
+public class Channel_info {
 
     @SerializedName("id")
     @Expose

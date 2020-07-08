@@ -16,7 +16,7 @@
 
 package com.paul9834.dynamicexoplayer.androidx.ClientRetrofit;
 
-import com.paul9834.dynamicexoplayer.androidx.Controllers.CanalesInterface;
+import com.paul9834.dynamicexoplayer.androidx.Controllers.Channel;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -24,13 +24,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
 /**
  * The type Retrofit client.
  */
-public class RetrofitClient {
+public class Retrofit_Base {
 
-    private static final String BASE_URL = "http://ott.terraformed.services/";
-    private static RetrofitClient mInstance;
+    private static final String BASE_URL = "https://headendev.badala.software/";
+    private static Retrofit_Base mInstance;
     private Retrofit retrofit;
 
-    private RetrofitClient() {
+    private Retrofit_Base() {
         retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -42,9 +42,9 @@ public class RetrofitClient {
      *
      * @return the instance
      */
-    public static synchronized RetrofitClient getInstance() {
+    public static synchronized Retrofit_Base getInstance() {
         if (mInstance == null) {
-            mInstance = new RetrofitClient();
+            mInstance = new Retrofit_Base();
         }
         return mInstance;
     }
@@ -54,8 +54,8 @@ public class RetrofitClient {
      *
      * @return the login
      */
-    public CanalesInterface getLogin() {
-        return retrofit.create(CanalesInterface.class);
+    public Channel getLogin() {
+        return retrofit.create(Channel.class);
     }
 
 }

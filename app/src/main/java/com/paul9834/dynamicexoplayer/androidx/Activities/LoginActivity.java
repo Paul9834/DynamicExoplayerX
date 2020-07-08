@@ -30,8 +30,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.paul9834.dynamicexoplayer.androidx.ClientRetrofit.RetrofitClient;
-import com.paul9834.dynamicexoplayer.androidx.Entities.UserLogin;
+import com.paul9834.dynamicexoplayer.androidx.ClientRetrofit.Retrofit_Base;
+import com.paul9834.dynamicexoplayer.androidx.Entities.User;
 import com.paul9834.dynamicexoplayer.androidx.R;
 
 import java.util.List;
@@ -95,7 +95,7 @@ public class  LoginActivity extends AppCompatActivity {
         String correoCall = correo.getText().toString();
         String passwordCall = password.getText().toString();
 
-        Call<List<UserLogin>> call = RetrofitClient.getInstance().getLogin().login(correoCall,passwordCall);
+        Call<List<User>> call = Retrofit_Base.getInstance().getLogin().login(correoCall,passwordCall);
 
 
         final ProgressDialog progressDoalog;
@@ -106,20 +106,20 @@ public class  LoginActivity extends AppCompatActivity {
         progressDoalog.show();
 
 
-        call.enqueue(new Callback<List<UserLogin>>() {
+        call.enqueue(new Callback<List<User>>() {
                     @Override
-                    public void onResponse(Call<List<UserLogin>> call, retrofit2.Response<List<UserLogin>> response) {
+                    public void onResponse(Call<List<User>> call, retrofit2.Response<List<User>> response) {
                         progressDoalog.dismiss();
 
                 Log.e("TAG", response.code() + "");
 
-                List<UserLogin> lista = response.body();
+                List<User> lista = response.body();
 
                 Boolean auth=true;
 
                 int id = 0;
 
-                for (UserLogin e : lista) {
+                for (User e : lista) {
                     auth = e.getFail();
                     id = e.getIdUser();
                 }
@@ -147,7 +147,7 @@ public class  LoginActivity extends AppCompatActivity {
 
 
                     Toast.makeText(LoginActivity.this, "Ha iniciado sesión correctamente..", Toast.LENGTH_LONG).show();
-                    Intent i = new Intent(LoginActivity.this, RecyclerViewHome.class);
+                    Intent i = new Intent(LoginActivity.this, ChannelsFeedActivity.class);
                     startActivity(i);
                     finish();
 
@@ -155,7 +155,7 @@ public class  LoginActivity extends AppCompatActivity {
                 }
             }
             @Override
-            public void onFailure(Call<List<UserLogin>> call, Throwable t) {
+            public void onFailure(Call<List<User>> call, Throwable t) {
                 progressDoalog.dismiss();
                 Toast.makeText(LoginActivity.this, "Error.", Toast.LENGTH_LONG).show();
             }
@@ -175,7 +175,7 @@ public class  LoginActivity extends AppCompatActivity {
         boolean isRegistered = prefs.getBoolean("isRegistered", false);
 
         if(isRegistered){
-            Intent i = new Intent(LoginActivity.this, RecyclerViewHome.class);
+            Intent i = new Intent(LoginActivity.this, ChannelsFeedActivity.class);
             startActivity(i);
             finish();
         }

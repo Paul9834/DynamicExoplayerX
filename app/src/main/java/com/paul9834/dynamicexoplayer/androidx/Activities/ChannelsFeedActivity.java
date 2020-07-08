@@ -29,9 +29,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.paul9834.dynamicexoplayer.androidx.Adapters.CanalesAdapter;
-import com.paul9834.dynamicexoplayer.androidx.ClientRetrofit.RetrofitClient;
-import com.paul9834.dynamicexoplayer.androidx.Entities.Canales;
+import com.paul9834.dynamicexoplayer.androidx.Adapters.ChannelAdapter;
+import com.paul9834.dynamicexoplayer.androidx.ClientRetrofit.Retrofit_Base;
+import com.paul9834.dynamicexoplayer.androidx.Entities.Channel_info;
 import com.paul9834.dynamicexoplayer.androidx.R;
 
 import java.util.List;
@@ -44,7 +44,7 @@ import retrofit2.Callback;
 /**
  * The type Recycler view home.
  */
-public class RecyclerViewHome extends AppCompatActivity {
+public class ChannelsFeedActivity extends AppCompatActivity {
 
     /**
      * The Recycler view.
@@ -53,7 +53,7 @@ public class RecyclerViewHome extends AppCompatActivity {
     /**
      * The Adapter.
      */
-    CanalesAdapter adapter;
+    ChannelAdapter adapter;
     /**
      * The M swipe refresh layout.
      */
@@ -69,9 +69,11 @@ public class RecyclerViewHome extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setTitle("Lista de Canales");
 
         recyclerView = findViewById(R.id.recyclerview2);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(RecyclerViewHome.this);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(ChannelsFeedActivity.this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout2);
         RetrofitSearch();
 
@@ -84,14 +86,14 @@ public class RecyclerViewHome extends AppCompatActivity {
         SharedPreferences sp = getSharedPreferences("your_prefs", Activity.MODE_PRIVATE);
         int idUser = sp.getInt("your_int_key", -1);
 
-        Call<List<Canales>> call = RetrofitClient.getInstance().getLogin().getCanales(idUser);
+        Call<List<Channel_info>> call = Retrofit_Base.getInstance().getLogin().getCanales(idUser);
 
-        call.enqueue(new Callback<List<Canales>>() {
+        call.enqueue(new Callback<List<Channel_info>>() {
 
             @Override
-            public void onResponse(Call<List<Canales>> call, retrofit2.Response<List<Canales>> response) {
+            public void onResponse(Call<List<Channel_info>> call, retrofit2.Response<List<Channel_info>> response) {
 
-                adapter = new CanalesAdapter(response.body());
+                adapter = new ChannelAdapter(response.body());
 
                 Log.e("Holaaa", "xd" + adapter.getItemCount());
 
@@ -109,8 +111,8 @@ public class RecyclerViewHome extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<Canales>> call, Throwable t) {
-                Toast.makeText(RecyclerViewHome.this, "Error." + t.getMessage(), Toast.LENGTH_LONG).show();
+            public void onFailure(Call<List<Channel_info>> call, Throwable t) {
+                Toast.makeText(ChannelsFeedActivity.this, "Error." + t.getMessage(), Toast.LENGTH_LONG).show();
                 Log.e("ERROR", Objects.requireNonNull(t.getMessage()));
 
             }

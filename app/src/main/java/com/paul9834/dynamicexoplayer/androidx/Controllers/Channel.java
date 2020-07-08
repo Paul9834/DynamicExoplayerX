@@ -16,8 +16,8 @@
 
 package com.paul9834.dynamicexoplayer.androidx.Controllers;
 
-import com.paul9834.dynamicexoplayer.androidx.Entities.Canales;
-import com.paul9834.dynamicexoplayer.androidx.Entities.UserLogin;
+import com.paul9834.dynamicexoplayer.androidx.Entities.Channel_info;
+import com.paul9834.dynamicexoplayer.androidx.Entities.User;
 
 import java.util.List;
 
@@ -31,7 +31,7 @@ import retrofit2.http.Path;
 /**
  * The interface Canales interface.
  */
-public interface CanalesInterface {
+public interface Channel {
 
     /**
      * Gets canales.
@@ -39,7 +39,7 @@ public interface CanalesInterface {
      * @return the canales
      */
     @GET("getCanales/{id}")
-    Call<List<Canales>> getCanales(@Path("id") int id);
+    Call<List<Channel_info>> getCanales(@Path("id") int id);
 
     /**
      * Login call.
@@ -50,7 +50,7 @@ public interface CanalesInterface {
      */
     @FormUrlEncoded
     @POST("api/mobile/login")
-    Call<List<UserLogin>> login(
+    Call<List<User>> login(
             @Field("email") String email,
             @Field("password") String password);
 }
