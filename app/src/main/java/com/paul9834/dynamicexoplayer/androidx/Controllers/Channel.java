@@ -33,26 +33,20 @@ import retrofit2.http.Path;
  */
 public interface Channel {
 
-    /**
-     * Gets canales.
-     *
-     * @return the canales
-     */
+
     @GET("getCanales/{id}")
     Call<List<Channel_info>> getCanales(@Path("id") int id);
 
-    /**
-     * Login call.
-     *
-     * @param email    the email
-     * @param password the password
-     * @return the call
-     */
     @FormUrlEncoded
     @POST("api/mobile/login")
     Call<List<User>> login(
             @Field("email") String email,
             @Field("password") String password);
+
+    @GET("ckusr/{id}")
+    Call<Boolean> checkStatusAccount(@Path("id") int id);
+
+
 }
 
 

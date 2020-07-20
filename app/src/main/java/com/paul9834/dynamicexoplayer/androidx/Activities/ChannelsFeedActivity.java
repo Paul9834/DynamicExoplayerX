@@ -17,9 +17,12 @@
 package com.paul9834.dynamicexoplayer.androidx.Activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
@@ -31,6 +34,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.paul9834.dynamicexoplayer.androidx.Adapters.ChannelAdapter;
 import com.paul9834.dynamicexoplayer.androidx.ClientRetrofit.Retrofit_Base;
+import com.paul9834.dynamicexoplayer.androidx.Entities.Channel;
 import com.paul9834.dynamicexoplayer.androidx.Entities.Channel_info;
 import com.paul9834.dynamicexoplayer.androidx.R;
 
@@ -44,7 +48,7 @@ import retrofit2.Callback;
 /**
  * The type Recycler view home.
  */
-public class ChannelsFeedActivity extends AppCompatActivity {
+public class ChannelsFeedActivity extends AppCompatActivity implements View.OnClickListener{
 
     /**
      * The Recycler view.
@@ -59,11 +63,16 @@ public class ChannelsFeedActivity extends AppCompatActivity {
      */
     SwipeRefreshLayout mSwipeRefreshLayout;
 
+    Button button;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recyclerview);
 
+
+        button = findViewById(R.id.epg);
+        button.setOnClickListener(this);
 
         ActionBar actionBar = getSupportActionBar(); // or getActionBar();
         Objects.requireNonNull(getSupportActionBar()).setTitle("Lista de Canales");
@@ -81,7 +90,6 @@ public class ChannelsFeedActivity extends AppCompatActivity {
     }
 
     private void RetrofitSearch() {
-
 
         SharedPreferences sp = getSharedPreferences("your_prefs", Activity.MODE_PRIVATE);
         int idUser = sp.getInt("your_int_key", -1);
@@ -117,6 +125,15 @@ public class ChannelsFeedActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.epg:
+                startActivity(new Intent(ChannelsFeedActivity.this, EPGActivity.class));
+                break;
+        }
     }
 }
 

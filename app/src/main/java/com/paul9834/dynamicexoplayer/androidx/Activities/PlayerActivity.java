@@ -16,7 +16,10 @@
 
 package com.paul9834.dynamicexoplayer.androidx.Activities;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.PictureInPictureParams;
+import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
@@ -48,18 +51,22 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
  * Reproducción de ExoPlayer a través de microservicio Rest con links dinamicos..
  *
  * @author Kevin Paul Montealegre Melo
- * @version 2.0
+ * @version 1.0
  */
-public class PlayerActivity extends AppCompatActivity  implements Player.EventListener {
+public class PlayerActivity extends AppCompatActivity  implements Player.EventListener, Runnable  {
 
     ConcatenatingMediaSource concatenatedSource;
     TextView canal;
@@ -77,15 +84,24 @@ public class PlayerActivity extends AppCompatActivity  implements Player.EventLi
     private int currentWindow = 0;
     private long playbackPosition = 0;
 
+    private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+
+    private int idUser;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        SharedPreferences sp = getSharedPreferences("your_prefs", Activity.MODE_PRIVATE);
+        idUser = sp.getInt("your_int_key", -1);
+
+
+        scheduler.scheduleWithFixedDelay(this, 10,30, TimeUnit.SECONDS);
 
         simpleExoPlayerView = findViewById(R.id.player_view);
-
 
         canal = new TextView(this);
         canal = findViewById(R.id.texto);
@@ -131,7 +147,7 @@ public class PlayerActivity extends AppCompatActivity  implements Player.EventLi
 
     void requestMediaAPI() {
 
-        Call<List<Channel_info>> call = Retrofit_Base.getInstance().getLogin().getCanales(1);
+        Call<List<Channel_info>> call = Retrofit_Base.getInstance().getLogin().getCanales(idUser);
         call.enqueue(new Callback<List<Channel_info>>() {
             @Override
             public void onResponse(Call<List<Channel_info>> call, retrofit2.Response<List<Channel_info>> response) {
@@ -189,5 +205,46 @@ public class PlayerActivity extends AppCompatActivity  implements Player.EventLi
                                     simpleExoPlayerView.getRight(), simpleExoPlayerView.getBottom())).build());
 
         }
+    }
+
+    @Override
+    public void run() {
+
+        Log.e("Status:", "Runnable Ok");
+
+        Call<Boolean> call = Retrofit_Base.getInstance().getLogin().checkStatusAccount(idUser);
+
+        call.enqueue(new Callback<Boolean>() {
+            @Override
+            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+
+                Log.e("Response API:", response.body() + "");
+                if (response.isSuccessful()) {
+                    boolean result = response.body();
+                    if (!result) {
+                        alerDialog();
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<Boolean> call, Throwable t) {
+
+            }
+        });
+    }
+    void alerDialog() {
+        AlertDialog alertDialog = new AlertDialog.Builder(PlayerActivity.this).create();
+        alertDialog.setTitle("Alerta");
+        alertDialog.setMessage("Su usuario se encuentra suspendido, por favor comuniquese con nosotros.");
+        alertDialog.setCancelable(false);
+        alertDialog.show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        scheduler.shutdown();
+
     }
 }
